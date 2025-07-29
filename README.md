@@ -14,12 +14,14 @@ node -v
 npm --version
 
 Check angular (no output means its working):
+
 ng 
 
 Run:
 npm install
 
 Check angular again (no output means its working):
+
 ng
 
 
