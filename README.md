@@ -1,5 +1,5 @@
 
-Checks to run first:
+# Checks to run first:
 node -v
 
 npm --version
@@ -9,6 +9,9 @@ https://nodejs.org/en
 
 Now run the node and npm checks again to verify installation.
 
+node -v
+
+npm --version
 
 Check angular (no output means its working):
 ng 
