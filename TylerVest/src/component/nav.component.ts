@@ -10,19 +10,12 @@ import { CommonModule } from '@angular/common';
     <nav class="navbar">
       <div class="nav-container">
         <div class="nav-brand">
-          <h2>Tyler Vest</h2>
+          <h2              
+            routerLink="/home" 
+            routerLinkActive="active"
+            class="nav-link">Tyler Vest</h2>
         </div>
         <ul class="nav-menu">
-          <li class="nav-item">
-            <a 
-              routerLink="/home" 
-              routerLinkActive="active"
-              class="nav-link"
-            >
-              Home
-            </a>
-          </li>
-
           <li class="nav-item">
             <a 
               routerLink="/investments" 
@@ -42,6 +35,17 @@ import { CommonModule } from '@angular/common';
               Predictions
             </a>
           </li>
+
+          <li class="nav-item">
+            <a 
+              routerLink="/importdata" 
+              routerLinkActive="active"
+              class="nav-link"
+            >
+              Import Data
+            </a>
+          </li>
+
         </ul>
       </div>
     </nav>

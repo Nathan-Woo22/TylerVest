@@ -1,15 +1,25 @@
-import { Component } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, PLATFORM_ID } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MessageSenderComponent } from './MessageSenderComponent';
+
 
 @Component({
   selector: 'app-investments',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MessageSenderComponent ],
   template: `
     <div class="investments-container">
       <header class="investments-header">
         <h1 class="investments-title">Investments</h1>
       </header>
+    <div class="text-field-container">
+        <label for="textInput" class="text-field-label">Label</label>
+        <input type="text" id="textInput" class="text-field-input">
+    </div>
+
+    <div>
+        <app-message-sender></app-message-sender>
+    </div>
     
     </div>
   `,
@@ -54,6 +64,31 @@ import { CommonModule } from '@angular/common';
       .investments-content {
         padding: 15px;
       }
+    }
+
+    .text-field-container {
+  margin-bottom: 16px;
+}
+
+    .text-field-label {
+    display: block;
+    margin-bottom: 4px;
+    font-weight: 500;
+    color: #333;
+    }
+
+    .text-field-input {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    }
+
+    .text-field-input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
     }
   `]
 })

@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { HomeComponent } from '../component/home.component';
 import { PredictionsComponent } from '../component/predictions.component';
 import { InvestmentsComponent } from '../component/investments.component';
+import { ImportDataComponent } from '../component/Importdata.component';
 //import { AboutComponent } from './components/about/about.component';
 
 export const routes: Routes = [
@@ -28,6 +29,11 @@ export const routes: Routes = [
     path: 'predictions',
     component: PredictionsComponent,
     title: 'Predictions'
+  },
+  {
+    path: 'importdata',
+    component: ImportDataComponent,
+    title: 'ImportData'
   },
   // About page route
 //   {
