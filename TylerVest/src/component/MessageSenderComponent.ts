@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import {Message, MessageService, BlobMessage } from '../MessageService';
 
 @Component({
@@ -49,6 +49,8 @@ import {Message, MessageService, BlobMessage } from '../MessageService';
   `]
 })
 export class MessageSenderComponent {
+
+  @Input() loanData: any;
   // Inject the MessageService
    constructor(private messageService: MessageService) {}
 
@@ -56,10 +58,10 @@ export class MessageSenderComponent {
   sendMessage(): void {
 
     const messageDetails = {
-      content: 'Hello, this is a hardcoded message!',
-      timestamp: new Date().toISOString(),
-      sender: 'current-user',
-      recipient: ''
+      LoanAmount: this.loanData?.loanAmount || 0,
+      InterestRate: this.loanData?.interestRate || 0,
+      Term: this.loanData?.term || 0,
+      LenderName: this.loanData?.lenderName || ''
     };
 
     // Create the final message object with id and blob only
@@ -67,8 +69,6 @@ export class MessageSenderComponent {
       id: this.generateMessageId(),
       blob: JSON.stringify(messageDetails)
     };
-
-
 
     this.messageService.sendMessage(message);
   }

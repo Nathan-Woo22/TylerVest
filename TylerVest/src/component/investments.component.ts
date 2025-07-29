@@ -1,27 +1,94 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, PLATFORM_ID } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, PLATFORM_ID } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MessageSenderComponent } from './MessageSenderComponent';
 
+
+interface LoanFormData {
+  loanAmount: number;
+  interestRate: number;
+  term: number;
+  lenderName: string;
+}
 
 @Component({
   selector: 'app-investments',
   standalone: true,
-  imports: [CommonModule, MessageSenderComponent ],
+  imports: [CommonModule, MessageSenderComponent, ReactiveFormsModule ],
   template: `
-    <div class="investments-container">
-      <header class="investments-header">
-        <h1 class="investments-title">Investments</h1>
-      </header>
-    <div class="text-field-container">
-        <label for="textInput" class="text-field-label">Label</label>
-        <input type="text" id="textInput" class="text-field-input">
-    </div>
+    <form [formGroup]="loanForm" class="space-y-6">
+        <div class="investments-container">
+            <header class="investments-header">
+                <h1 class="investments-title">Investments</h1>
+            </header>
+            <div class="text-field-container">
+                <label for="textInput" class="text-field-label">Loan Amount</label>
+                <input 
+                    type="number"
+                    id="textInput"
+                    class="text-field-input"
+                    formControlName="loanAmount"
+                />
+                <div *ngIf="loanForm.get('loanAmount')?.invalid && loanForm.get('loanAmount')?.touched" 
+                    class="text-red-500 text-sm">
+                    Loan amount is required and must be greater than 0
+                </div>
+            </div>
 
-    <div>
-        <app-message-sender></app-message-sender>
-    </div>
-    
-    </div>
+            <div class="text-field-container">
+                <label for="textInput" class="text-field-label">Interest Rate</label>
+                <input
+                    id="textInput" 
+                    class="text-field-input"
+                    type="number"
+                    step="0.01"
+                    formControlName="interestRate"
+                />
+
+                <div *ngIf="loanForm.get('interestRate')?.invalid && loanForm.get('interestRate')?.touched" 
+                    class="text-red-500 text-sm">
+                    Interest rate is required and must be greater than 0
+                </div>
+            </div>
+
+            <div class="text-field-container">
+                <label for="textInput" class="text-field-label">Term</label>
+                <input 
+                    id="term"
+                    type="number"
+                    formControlName="term"
+                    class="text-field-input"
+                />
+
+                <div *ngIf="loanForm.get('term')?.invalid && loanForm.get('term')?.touched" 
+                    class="text-red-500 text-sm">
+                    Term is required and must be greater than 0
+                </div>
+            </div>
+
+            <div class="text-field-container">
+                <label for="textInput" class="text-field-label">Lender Name</label>
+                <input 
+                    id="lenderName"
+                    type="text"
+                    formControlName="lenderName"
+                    class="text-field-input">
+
+                <div *ngIf="loanForm.get('lenderName')?.invalid && loanForm.get('lenderName')?.touched" 
+                    class="text-red-500 text-sm">
+                    Lender name is required
+                </div>
+            </div>
+
+
+
+            <div>
+                <app-message-sender [loanData]="getFormValues()">
+                </app-message-sender>
+            </div>
+
+        </div>
+    </form>
   `,
   styles: [`
     .investments-container {
@@ -93,5 +160,54 @@ import { MessageSenderComponent } from './MessageSenderComponent';
   `]
 })
 export class InvestmentsComponent {
-  constructor() {}
+    private formBuilder = inject(FormBuilder);
+
+    loanForm: FormGroup;
+    calculationResults: {
+    monthlyPayment: number;
+    totalInterest: number;
+    totalAmount: number;
+    lenderName: string;
+    } | null = null;
+
+    constructor() {
+        this.loanForm = this.formBuilder.group({
+            loanAmount: [0, [Validators.required, Validators.min(1)]],
+            interestRate: [0, [Validators.required, Validators.min(0.01)]],
+            term: [0, [Validators.required, Validators.min(1)]],
+            lenderName: ['', [Validators.required, Validators.minLength(2)]]
+        });
+    }
+
+    getFormValues(): LoanFormData {
+        const values = {
+            loanAmount: this.loanForm.get('loanAmount')?.value || 0,
+            interestRate: this.loanForm.get('interestRate')?.value || 0,
+            term: this.loanForm.get('term')?.value || 0,
+            lenderName: this.loanForm.get('lenderName')?.value || ''
+        }
+        console.log('Form values being passed:', values); // Add this line
+        return values;
+    }
+
+    hasError(controlName: string): boolean {
+        const control = this.loanForm.get(controlName);
+        return !!(control && control.invalid && control.touched);
+    }
+
+    getErrorMessage(controlName: string): string {
+        const control = this.loanForm.get(controlName);
+        if (control?.errors) {
+        if (control.errors['required']) {
+            return `${controlName} is required`;
+        }
+        if (control.errors['min']) {
+            return `${controlName} must be greater than ${control.errors['min'].min}`;
+        }
+        if (control.errors['minlength']) {
+            return `${controlName} must be at least ${control.errors['minlength'].requiredLength} characters`;
+        }
+        }
+        return '';
+  }
 }
