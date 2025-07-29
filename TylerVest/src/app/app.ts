@@ -1,9 +1,11 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { MessageSenderComponent } from '../component/MessageSenderComponent';
+
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet , MessageSenderComponent],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
