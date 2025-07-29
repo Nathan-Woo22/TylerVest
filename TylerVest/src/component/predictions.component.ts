@@ -1,62 +1,52 @@
-import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
+import { ApexOptions } from 'ng-apexcharts';
+import { NgApexchartsModule } from 'ng-apexcharts';
 
 @Component({
   selector: 'app-predictions',
   standalone: true,
-  imports: [CommonModule],
-  template: `
-    <div class="predictions-container">
-      <header class="predictions-header">
-        <h1 class="predictions-title">Predictions</h1>
-      </header>
-      
-    </div>
-  `,
-  styles: [`
-    .predictions-container {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 20px;
-      font-family: Arial, sans-serif;
-    }
-
-    .predictions-header {
-      margin-bottom: 30px;
-      text-align: center;
-    }
-
-    .predictions-title {
-      color: #333;
-      font-size: 2rem;
-      font-weight: 600;
-      margin: 0;
-      padding-bottom: 10px;
-      border-bottom: 2px solid #e0e0e0;
-    }
-
-    .predictions-content {
-      background: #f9f9f9;
-      border-radius: 8px;
-      padding: 20px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    @media (max-width: 768px) {
-      .predictions-container {
-        padding: 15px;
-      }
-      
-      .predictions-title {
-        font-size: 1.5rem;
-      }
-      
-      .predictions-content {
-        padding: 15px;
-      }
-    }
-  `]
+  imports: [CommonModule, NgApexchartsModule],
+  templateUrl: './predictions.tmpl.html',
+  styleUrls: ['./predictions.component.css'],
 })
 export class PredictionsComponent {
-  constructor() {}
+
+  newPrediction1: string = '';
+  newPrediction2: string = '';
+
+  categories: string[] = ['All', 'Loan1', 'Loan2', 'Loan3'];
+  selectedCategory: string = 'All';
+
+  chartOptions: ApexOptions = {
+    chart: {
+      type: 'line',
+    },
+    series: [
+      {
+        name: 'Growth (%)',
+        data: [5, 10, 15, 20],
+      },
+    ],
+    xaxis: {
+      categories: ['Q1', 'Q2', 'Q3', 'Q4'],
+    },
+    title: {
+      text: 'Growth Forecast',
+    } as ApexTitleSubtitle,
+  };
+
+  addPredictions() {
+    if (this.newPrediction1.trim() || this.newPrediction2.trim()) {
+      console.log('First Prediction:', this.newPrediction1);
+      console.log('Second Prediction:', this.newPrediction2);
+      this.newPrediction1 = '';
+      this.newPrediction2 = '';
+    }
+  }
+
+  onCategoryChange(category: string) {
+    this.selectedCategory = category;
+    console.log('Select a Loan to Evaluate:', category);
+  }
 }

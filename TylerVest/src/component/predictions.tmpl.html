@@ -1,0 +1,54 @@
+<div class="predictions-container">
+  <header class="predictions-header">
+    <h1 class="predictions-title">Predictions</h1>
+  </header>
+
+  <section class="predictions-content">
+    <p>Welcome to the predictions section! Here, be able to evaluate the future of your investments and loans.</p>
+
+    <div class="dropdown-selector">
+      <label for="category">Select a Loan to Evaluate:</label>
+      <select id="category" [(ngModel)]="selectedCategory" (change)="onCategoryChange($event.target.value)">
+        <option *ngFor="let category of categories" [value]="category">
+          {{ category }}
+        </option>
+      </select>
+    </div>
+
+    <ul>
+      <li *ngFor="let prediction of predictions">
+        {{ prediction }}
+      </li>
+    </ul>
+
+    <div class="add-prediction">
+        <label for="category">Enter the number of years you would like to pay off your loan in:</label>
+        <div class="input-container">
+            <input
+            type="text"
+            [(ngModel)]="newPrediction1"
+            class="styled-input"
+            />
+        </div>
+        <label for="category">Enter desired monthly payment:</label>
+        <div class="">
+            <input
+            type="text"
+            [(ngModel)]="newPrediction2"
+            class="styled-input"
+            />
+        </div>
+        <button class="styled-button" (click)="addPredictions()">Add Predictions</button>
+    </div>
+  </section>
+
+  <section class="chart-container">
+    <h2>Growth Forecast</h2>
+    <apx-chart
+      [series]="chartOptions.series"
+      [chart]="chartOptions.chart"
+      [xaxis]="chartOptions.xaxis"
+      [title]="chartOptions.title"
+    ></apx-chart>
+  </section>
+</div>
