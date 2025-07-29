@@ -9,6 +9,7 @@ interface LoanFormData {
   interestRate: number;
   term: number;
   lenderName: string;
+  loanName: string;
 }
 
 @Component({
@@ -27,6 +28,7 @@ export class InvestmentsComponent {
     totalInterest: number;
     totalAmount: number;
     lenderName: string;
+    loanName: string;
     } | null = null;
 
     constructor() {
@@ -34,7 +36,8 @@ export class InvestmentsComponent {
             loanAmount: [0, [Validators.required, Validators.min(1)]],
             interestRate: [0, [Validators.required, Validators.min(0.01)]],
             term: [0, [Validators.required, Validators.min(1)]],
-            lenderName: ['', [Validators.required, Validators.minLength(2)]]
+            lenderName: ['', [Validators.required, Validators.minLength(2)]],
+            loanName: ['', [Validators.required, Validators.minLength(2)]]
         });
     }
 
@@ -43,7 +46,8 @@ export class InvestmentsComponent {
             loanAmount: this.loanForm.get('loanAmount')?.value || 0,
             interestRate: this.loanForm.get('interestRate')?.value || 0,
             term: this.loanForm.get('term')?.value || 0,
-            lenderName: this.loanForm.get('lenderName')?.value || ''
+            lenderName: this.loanForm.get('lenderName')?.value || '',
+            loanName: this.loanForm.get('loanName')?.value || ''
         }
         console.log('Form values being passed:', values); // Add this line
         return values;

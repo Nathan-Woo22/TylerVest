@@ -6,13 +6,11 @@ import {Message, MessageService, BlobMessage } from '../MessageService';
   standalone: true,
   template: `
     <div class="message-sender-container">
-      <h2>Send Message</h2>
-      
       <button 
         type="button" 
         (click)="sendMessage()"
         class="send-button">
-        Send Message
+        Submit
       </button>
     </div>
   `,
@@ -63,7 +61,8 @@ export class MessageSenderComponent {
       LoanAmount: this.loanData?.loanAmount || 0,
       InterestRate: this.loanData?.interestRate || 0,
       Term: this.loanData?.term || 0,
-      LenderName: this.loanData?.lenderName || ''
+      LenderName: this.loanData?.lenderName || '',
+      LoanName: this.loanData?.loanName || ''
     };
 
     // Create the final message object with id and blob only

@@ -61,5 +61,19 @@ namespace TylerVest_Service
         command.ExecuteNonQuery();
       }
     }
+
+    public void RetrieveLoanInformation() 
+    {
+      string connectionString = "Server=PLAPVSVODYDB10\\WEBAPPDEV;Database=Tyler;User Id=TSGMeridian;Password=alp;";
+      string selectQuery = "SELECT LoanName FROM Items";
+      using (SqlConnection connection = new SqlConnection(connectionString))
+      using (SqlCommand command = new SqlCommand(selectQuery, connection))
+      {
+        command.Parameters.AddWithValue("@ID", ID);
+        connection.Open();
+        object result = command.ExecuteScalar();
+        return result?.ToString();
+      }
+    }
   }
 }

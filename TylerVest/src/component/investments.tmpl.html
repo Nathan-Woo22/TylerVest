@@ -61,6 +61,19 @@
                     Lender name is required
                 </div>
             </div>
+            <div class="text-field-container">
+                <label for="textInput" class="text-field-label">Loan Name</label>
+                <input 
+                    id="laonName"
+                    type="text"
+                    formControlName="loanName"
+                    class="text-field-input">
+
+                <div *ngIf="loanForm.get('loanName')?.invalid && loanForm.get('loanName')?.touched" 
+                    class="text-red-500 text-sm">
+                    Loan name is required
+                </div>
+            </div>
 
 
 
