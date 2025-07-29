@@ -34,14 +34,6 @@ export class MessageService {
         console.log('Error:', error);
       }
     });
-
-    this.http.get(this.apiUrl + "?id=" + message.id).subscribe({
-      next: (response) => {
-        console.log('Success! Response:', response);
-      },
-      error: (error) => {
-        console.log('Error:', error);
-      }
-    });
   }
+  
 }
