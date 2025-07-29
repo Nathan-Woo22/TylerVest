@@ -50,7 +50,9 @@ import {Message, MessageService, BlobMessage } from '../MessageService';
 })
 export class MessageSenderComponent {
 
+  
   @Input() loanData: any;
+  @Input() isLoanMessage: boolean = false;
   // Inject the MessageService
    constructor(private messageService: MessageService) {}
 
@@ -73,6 +75,11 @@ export class MessageSenderComponent {
     this.messageService.sendMessage(message);
   }
     private generateMessageId(): string {
-    return `msg_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      const baseMessage = `msg_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      if (this.isLoanMessage) {
+        console.log("LOAN");
+        return `Add_Loan` + baseMessage;
+      }
+      return `msg_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   }
 }

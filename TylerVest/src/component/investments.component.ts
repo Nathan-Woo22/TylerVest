@@ -83,7 +83,7 @@ interface LoanFormData {
 
 
             <div>
-                <app-message-sender [loanData]="getFormValues()">
+                <app-message-sender [loanData]="getFormValues()" [isLoanMessage]="true">
                 </app-message-sender>
             </div>
 
