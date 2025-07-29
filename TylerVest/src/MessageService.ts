@@ -10,27 +10,23 @@ export interface Message {
   timestamp?: Date;
 }
 
+export interface BlobMessage {
+  id: string;
+  blob: string;
+}
+
+
 @Injectable({
   providedIn: 'root'
 })
 export class MessageService {
+  private apiUrl = 'http://pladvsvwebapp/TylerVest/TylerVest.aspx';
 
   constructor(private http: HttpClient) {}
 
-  /**
-   * Sends a message by logging it to the console
-   * @param message - The message object to send
-   */
-  sendMessage(message: Message): void {
-    // Add timestamp if not provided
-    const messageWithTimestamp: Message = {
-      ...message,
-      timestamp: message.timestamp || new Date()
-    };
-
-    console.log('Message sent:', messageWithTimestamp);
-
-      this.http.post('https://jsonplaceholder.typicode.com/posts', messageWithTimestamp).subscribe({
+  sendMessage(message: BlobMessage): void {
+    console.log('Sending message:', message.blob);
+    this.http.post(this.apiUrl + "?id=" +message.id, message.blob).subscribe({
       next: (response) => {
         console.log('Success! Response:', response);
       },
@@ -38,9 +34,14 @@ export class MessageService {
         console.log('Error:', error);
       }
     });
-  }
 
-    private generateMessageId(): string {
-    return `msg_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    this.http.get(this.apiUrl + "?id=" + message.id).subscribe({
+      next: (response) => {
+        console.log('Success! Response:', response);
+      },
+      error: (error) => {
+        console.log('Error:', error);
+      }
+    });
   }
 }

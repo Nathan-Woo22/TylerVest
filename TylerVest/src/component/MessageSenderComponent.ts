@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import {Message, MessageService} from '../MessageService';
+import {Message, MessageService, BlobMessage } from '../MessageService';
 
 @Component({
   selector: 'app-message-sender',
@@ -55,13 +55,21 @@ export class MessageSenderComponent {
   // Handle button click
   sendMessage(): void {
 
-    const message: Message = {
-        id: this.generateMessageId(),
-        content: 'Hello, this is a hardcoded message!',
-        timestamp: new Date(),
-        sender: 'current-user',
-        recipient: ''
+    const messageDetails = {
+      content: 'Hello, this is a hardcoded message!',
+      timestamp: new Date().toISOString(),
+      sender: 'current-user',
+      recipient: ''
     };
+
+    // Create the final message object with id and blob only
+    const message: BlobMessage = {
+      id: this.generateMessageId(),
+      blob: JSON.stringify(messageDetails)
+    };
+
+
+
     this.messageService.sendMessage(message);
   }
     private generateMessageId(): string {
