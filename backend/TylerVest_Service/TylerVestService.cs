@@ -141,5 +141,70 @@ namespace TylerVest_Service
       return json;
       //Response.End();
     }
+
+    public string LoadOdysseyFinancialSummary()
+    {
+      //Uses QA-2024-0-TX QA Site
+      string connectionString = "Server=jpawqasqldb.odysseydevcloud.tylertech.com\\qa24_0_tx;Database=Financial;User Id=TSGMeridian;Password=alp;";
+      string selectQuery =
+                          @"USE Financial
+
+                            SELECT FORMAT(SUM(CASE
+                                                  WHEN FI.ChargeAmount - FI.CreditAmount > 0
+                                                   THEN FI.ChargeAmount - FI.CreditAmount
+                                                   ELSE 0
+                                                END), 'C', 'en-US') AS 'TotalCharges'
+                            FROM FeeInst FI
+                              INNER JOIN xFincChrgFeeInst xFCFI ON FI.FeeInstanceID = xFCFI.FeeInstanceID
+                              INNER JOIN xFeeInstParty xFIP ON xFCFI.FeeInstanceID = xFIP.FeeInstanceID
+                              INNER JOIN xFincChrgParty xFCP ON(xFCFI.ChargeID = xFCP.ChargeID AND xFIP.PartyID = xFCP.PartyID)
+                              INNER JOIN xCaseFincChrg xCFC ON xFCFI.ChargeID = xCFC.ChargeID
+                              INNER JOIN FincChrg FC ON xFCFI.ChargeID = FC.ChargeID
+                              INNER JOIN uFincCat uFC ON FC.FinancialCategoryID = uFC.FinancialCategoryID
+                            WHERE uFC.FinancialCategoryKey = 'CASE'
+
+                            SELECT FORMAT(SUM (CASE
+                                                  WHEN FI.ChargeAmount -FI.PaymentAmount - FI.CreditAmount > 0
+                                                  THEN FI.ChargeAmount - FI.PaymentAmount - FI.CreditAmount
+                                                  ELSE 0
+                                                END)  , 'C', 'en-US')
+		 
+		                           AS 'UnpaidBalances'
+                            FROM FeeInst FI
+                              INNER JOIN xFincChrgFeeInst xFCFI ON FI.FeeInstanceID = xFCFI.FeeInstanceID
+                              INNER JOIN xFeeInstParty xFIP ON xFCFI.FeeInstanceID = xFIP.FeeInstanceID
+                              INNER JOIN xFincChrgParty xFCP ON(xFCFI.ChargeID = xFCP.ChargeID AND xFIP.PartyID = xFCP.PartyID)
+                              INNER JOIN xCaseFincChrg xCFC ON xFCFI.ChargeID = xCFC.ChargeID
+                              INNER JOIN FincChrg FC ON xFCFI.ChargeID = FC.ChargeID
+                              INNER JOIN uFincCat uFC ON FC.FinancialCategoryID = uFC.FinancialCategoryID
+                            WHERE uFC.FinancialCategoryKey = 'CASE'
+
+                            SELECT FORMAT(SUM (AmountDue) , 'C', 'en-US') AS 'UnpaidPaymentPlans'
+                            FROM PmtSchdPayments
+                            WHERE AppliedAmount<AmountDue";
+      using (SqlConnection connection = new SqlConnection(connectionString))
+      using (SqlCommand command = new SqlCommand(selectQuery, connection))
+      {
+        connection.Open();
+        using (SqlDataReader reader = command.ExecuteReader())
+        {
+          var results = new List<string>();
+          do
+          {
+            if (reader.Read())
+            {
+              // Get the first column of the current result set
+              results.Add(reader[0]?.ToString() ?? string.Empty);
+            }
+            else
+            {
+              results.Add(string.Empty);
+            }
+          } while (reader.NextResult());
+
+          return string.Join(",", results);
+        }
+      }
+    }
   }
 }

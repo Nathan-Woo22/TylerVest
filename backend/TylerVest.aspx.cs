@@ -8,7 +8,8 @@ public partial class TestPage : System.Web.UI.Page
   {
     Response.ContentType = "text/plain"; // or "application/json", etc.
 
-      string data = "";
+    string data = "";
+    
     using (var reader = new System.IO.StreamReader(Request.InputStream))
     {
       data = reader.ReadToEnd();
