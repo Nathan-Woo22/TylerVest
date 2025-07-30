@@ -1,0 +1,6 @@
+/* Make only tooltip text black (does NOT affect legend/axes) */
+:host ::ng-deep .apexcharts-tooltip,
+host ::ng-deep .apexcharts-tooltip-title,
+:host ::ng-deep .apexcharts-tooltip-text-y-value {
+  color: #000 !important;
+}

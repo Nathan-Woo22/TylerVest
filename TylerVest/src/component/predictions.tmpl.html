@@ -42,8 +42,14 @@
     </div>
   </section>
 
+  <section>
+    <h2>Loan Visualization</h2>
+    <div *ngIf="loans.length === 0">No loan data to display.</div>
+      <app-generic-loan-chart [loans]="loans" [isHomeScreen]=true></app-generic-loan-chart>
+  </section>
+  <app-income-chart [income]="income"></app-income-chart>
   <app-generic-loan-chart [loans]="loans" [isHomeScreen]="false"></app-generic-loan-chart>
-
+  <!-- <app-income-chart></app-income-chart> -->
 
   <!-- <section class="chart-container">
     <h2>Growth Forecast</h2>

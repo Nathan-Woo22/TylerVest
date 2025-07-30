@@ -5,18 +5,23 @@ import { NgApexchartsModule } from 'ng-apexcharts';
 import { FormsModule } from '@angular/forms';
 import { GenericLoanChartComponent } from './generic.chart.component';
 import { LoanFormData } from './investments.component';
+import { IncomeData } from './income.chart.component'
+import { IncomeChartComponent } from './income.chart.component';
 
 
 @Component({
   selector: 'app-predictions',
   standalone: true,
-  imports: [CommonModule, NgApexchartsModule, GenericLoanChartComponent],
+  imports: [CommonModule, NgApexchartsModule, GenericLoanChartComponent, IncomeChartComponent],
   templateUrl: './predictions.tmpl.html',
   styleUrls: ['./predictions.component.css'],
 })
 export class PredictionsComponent{
 
     loans: LoanFormData[] = [];
+
+    income: IncomeData[] = [];
+    
   
     async loadGraph() {
       try {
