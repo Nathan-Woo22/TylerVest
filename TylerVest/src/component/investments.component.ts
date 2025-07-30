@@ -4,12 +4,12 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { MessageSenderComponent } from './MessageSenderComponent';
 
 
-interface LoanFormData {
-  loanAmount: number;
-  interestRate: number;
-  term: number;
-  lenderName: string;
-  loanName: string;
+export interface LoanFormData {
+  Principal: number;
+  InterestRate: number;
+  NumPayments: number;
+  StartDate: string;
+  LoanName: string;
 }
 
 @Component({
@@ -24,30 +24,30 @@ export class InvestmentsComponent {
 
     loanForm: FormGroup;
     calculationResults: {
-    monthlyPayment: number;
-    totalInterest: number;
-    totalAmount: number;
-    lenderName: string;
+    principal: number;
+    interestRate: number;
+    numPayments: number;
+    startDate: string;
     loanName: string;
     } | null = null;
 
     constructor() {
         this.loanForm = this.formBuilder.group({
-            loanAmount: [0, [Validators.required, Validators.min(1)]],
-            interestRate: [0, [Validators.required, Validators.min(0.01)]],
-            term: [0, [Validators.required, Validators.min(1)]],
-            lenderName: ['', [Validators.required, Validators.minLength(2)]],
-            loanName: ['', [Validators.required, Validators.minLength(2)]]
-        });
+            principal: [null, [Validators.required, Validators.min(0.01)]],
+            interestRate: [null, [Validators.required, Validators.min(0.01)]],
+            numPayments: [null, [Validators.required, Validators.min(1)]],
+            startDate: [null, Validators.required],
+            loanName: [null, Validators.required]
+          });
     }
 
     getFormValues(): LoanFormData {
         const values = {
-            loanAmount: this.loanForm.get('loanAmount')?.value || 0,
-            interestRate: this.loanForm.get('interestRate')?.value || 0,
-            term: this.loanForm.get('term')?.value || 0,
-            lenderName: this.loanForm.get('lenderName')?.value || '',
-            loanName: this.loanForm.get('loanName')?.value || ''
+            Principal: this.loanForm.get('principal')?.value || 0,
+            InterestRate: this.loanForm.get('interestRate')?.value || 0,
+            NumPayments: this.loanForm.get('numPayments')?.value || 0,
+            StartDate: this.loanForm.get('startDate')?.value || '',
+            LoanName: this.loanForm.get('loanName')?.value || ''
         }
         console.log('Form values being passed:', values); // Add this line
         return values;

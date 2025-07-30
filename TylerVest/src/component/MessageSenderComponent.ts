@@ -69,11 +69,11 @@ export class MessageSenderComponent {
   saveLoadInfo(): void {
 
     const messageDetails = {
-      LoanAmount: this.loanData?.loanAmount || 0,
-      InterestRate: this.loanData?.interestRate || 0,
-      Term: this.loanData?.term || 0,
-      LenderName: this.loanData?.lenderName || '',
-      LoanName: this.loanData?.loanName || ''
+      Principal: this.loanData?.Principal || 0,
+      InterestRate: this.loanData?.InterestRate || 0,
+      NumPayments: this.loanData?.NumPayments || 0,
+      StartDate: this.loanData?.StartDate || '',
+      LoanName: this.loanData?.LoanName || ''
     };
 
     // Create the final message object with id and blob only

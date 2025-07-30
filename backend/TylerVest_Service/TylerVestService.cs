@@ -19,9 +19,16 @@ namespace TylerVest_Service
         string connectionString = "Server=PLAPVSVODYDB10\\WEBAPPDEV;Database=Tyler;User Id=TSGMeridian;Password=alp;";
         string upsertQuery = @"
                             IF EXISTS (SELECT 1 FROM Items WHERE ID = @ID)
-                                UPDATE Items SET LoanAmount = @LoanAmount WHERE ID = @ID
+                                UPDATE Items 
+                                SET InterestRate = @InterestRate,
+                                    NumPayments = @NumPayments,
+                                    Principal = @Principal,
+                                    StartDate = @StartDate,
+                                    LoanName = @LoanName
+                                WHERE ID = @ID
                             ELSE
-                                INSERT INTO Items (ID, InterestRate, LenderName, LoanAmount, Term, LoanName) VALUES (@ID, @InterestRate, @LenderName, @LoanAmount, @Term, @LoanName)";
+                                INSERT INTO Items (ID, InterestRate, NumPayments, Principal, StartDate, LoanName)
+                                VALUES (@ID, @InterestRate, @NumPayments, @Principal, @StartDate, @LoanName)";
 
         using (SqlConnection connection = new SqlConnection(connectionString))
         using (SqlCommand command = new SqlCommand(upsertQuery, connection))
@@ -120,12 +127,14 @@ namespace TylerVest_Service
           //return json;
           using (SqlDataReader reader = command.ExecuteReader())
           {
-              while (reader.Read())
-              {
-                  var loan = new Dictionary<string, object>();
+            while (reader.Read())
+            {
+              var loan = new Dictionary<string, object>();
               loan["LoanName"] = reader["LoanName"];
-              loan["LoanAmount"] = reader["LoanAmount"];
+              loan["Principal"] = reader["Principal"];
               loan["InterestRate"] = reader["InterestRate"];
+              loan["NumPayments"] = reader["NumPayments"];
+              loan["StartDate"] = reader["StartDate"];
               loan["ID"] = reader["ID"];
               loans.Add(loan);
             }

@@ -48,12 +48,12 @@ export class PredictionsComponent{
     } catch (error) {
       console.error('Error:', error);
     }
-    if (this.newPrediction1.trim() || this.newPrediction2.trim()) {
-      console.log('First Prediction:', this.newPrediction1);
-      console.log('Second Prediction:', this.newPrediction2);
-      this.newPrediction1 = '';
-      this.newPrediction2 = '';
-    }
+    // if (this.newPrediction1.trim() || this.newPrediction2.trim()) {
+    //   console.log('First Prediction:', this.newPrediction1);
+    //   console.log('Second Prediction:', this.newPrediction2);
+    //   this.newPrediction1 = '';
+    //   this.newPrediction2 = '';
+    // }
   }
 
   onCategoryChange(category: string) {

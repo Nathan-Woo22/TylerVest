@@ -1,86 +1,84 @@
 <form [formGroup]="loanForm" class="space-y-6">
-        <div class="investments-container">
-            <header class="investments-header">
-                <h1 class="investments-title">Investments</h1>
-            </header>
-            <div class="text-field-container">
-                <label for="textInput" class="text-field-label">Loan Amount</label>
-                <input 
-                    type="number"
-                    id="textInput"
-                    class="text-field-input"
-                    formControlName="loanAmount"
-                />
-                <div *ngIf="loanForm.get('loanAmount')?.invalid && loanForm.get('loanAmount')?.touched" 
-                    class="text-red-500 text-sm">
-                    Loan amount is required and must be greater than 0
-                </div>
+    <div class="investments-container">
+        <header class="investments-header">
+            <h1 class="investments-title">Investments</h1>
+        </header>
+        
+        <div class="text-field-container">
+            <label for="principal" class="text-field-label">Principal</label>
+            <input 
+                type="number"
+                id="principal"
+                class="text-field-input"
+                formControlName="principal"
+            />
+            <div *ngIf="loanForm.get('principal')?.invalid && loanForm.get('principal')?.touched" 
+                class="text-red-500 text-sm">
+                Principal is required and must be greater than 0
             </div>
-
-            <div class="text-field-container">
-                <label for="textInput" class="text-field-label">Interest Rate</label>
-                <input
-                    id="textInput" 
-                    class="text-field-input"
-                    type="number"
-                    step="0.01"
-                    formControlName="interestRate"
-                />
-
-                <div *ngIf="loanForm.get('interestRate')?.invalid && loanForm.get('interestRate')?.touched" 
-                    class="text-red-500 text-sm">
-                    Interest rate is required and must be greater than 0
-                </div>
-            </div>
-
-            <div class="text-field-container">
-                <label for="textInput" class="text-field-label">Term</label>
-                <input 
-                    id="term"
-                    type="number"
-                    formControlName="term"
-                    class="text-field-input"
-                />
-
-                <div *ngIf="loanForm.get('term')?.invalid && loanForm.get('term')?.touched" 
-                    class="text-red-500 text-sm">
-                    Term is required and must be greater than 0
-                </div>
-            </div>
-
-            <div class="text-field-container">
-                <label for="textInput" class="text-field-label">Lender Name</label>
-                <input 
-                    id="lenderName"
-                    type="text"
-                    formControlName="lenderName"
-                    class="text-field-input">
-
-                <div *ngIf="loanForm.get('lenderName')?.invalid && loanForm.get('lenderName')?.touched" 
-                    class="text-red-500 text-sm">
-                    Lender name is required
-                </div>
-            </div>
-            <div class="text-field-container">
-                <label for="textInput" class="text-field-label">Loan Name</label>
-                <input 
-                    id="laonName"
-                    type="text"
-                    formControlName="loanName"
-                    class="text-field-input">
-
-                <div *ngIf="loanForm.get('loanName')?.invalid && loanForm.get('loanName')?.touched" 
-                    class="text-red-500 text-sm">
-                    Loan name is required
-                </div>
-            </div>
-
-
-
-            <div>
-                <app-message-sender [loanData]="getFormValues()">
-                </app-message-sender>
-            </div>
-
         </div>
-    </form>
+
+        <div class="text-field-container">
+            <label for="interestRate" class="text-field-label">Interest Rate</label>
+            <input
+                id="interestRate" 
+                class="text-field-input"
+                type="number"
+                step="0.01"
+                formControlName="interestRate"
+            />
+
+            <div *ngIf="loanForm.get('interestRate')?.invalid && loanForm.get('interestRate')?.touched" 
+                class="text-red-500 text-sm">
+                Interest rate is required and must be greater than 0
+            </div>
+        </div>
+
+        <div class="text-field-container">
+            <label for="numPayments" class="text-field-label">Number of Monthly Payments</label>
+            <input 
+                id="numPayments"
+                type="number"
+                formControlName="numPayments"
+                min="1"
+                class="text-field-input"
+            />
+            <div *ngIf="loanForm.get('numPayments')?.invalid && loanForm.get('numPayments')?.touched" 
+                class="text-red-500 text-sm">
+                Number of payments is required and must be at least 1
+            </div>
+        </div>
+
+        <div class="text-field-container">
+            <label for="startDate" class="text-field-label">Start Date</label>
+            <input 
+                id="startDate"
+                type="date"
+                formControlName="startDate"
+                class="text-field-input"
+            />
+            <div *ngIf="loanForm.get('startDate')?.invalid && loanForm.get('startDate')?.touched" 
+                class="text-red-500 text-sm">
+                Start date is required
+            </div>
+        </div>
+
+        <div class="text-field-container">
+            <label for="loanName" class="text-field-label">Loan Name</label>
+            <input 
+                id="loanName"
+                type="text"
+                formControlName="loanName"
+                class="text-field-input">
+
+            <div *ngIf="loanForm.get('loanName')?.invalid && loanForm.get('loanName')?.touched" 
+                class="text-red-500 text-sm">
+                Loan name is required
+            </div>
+        </div>
+
+        <div>
+            <app-message-sender [loanData]="getFormValues()"></app-message-sender>
+        </div>
+    </div>
+</form>
