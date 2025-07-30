@@ -6,7 +6,7 @@
       <section>
         <h2>Loan Visualization</h2>
         <div *ngIf="loans.length === 0">No loan data to display.</div>
-          <app-generic-loan-chart [loans]="loans"></app-generic-loan-chart>
+          <app-generic-loan-chart [loans]="loans" [isHomeScreen]=true></app-generic-loan-chart>
       </section>
 
       <main class="main-content">

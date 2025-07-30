@@ -3,22 +3,41 @@ import { Component, OnInit } from '@angular/core';
 import { ApexOptions } from 'ng-apexcharts';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { FormsModule } from '@angular/forms';
+import { GenericLoanChartComponent } from './generic.chart.component';
+import { LoanFormData } from './investments.component';
 
 
 @Component({
   selector: 'app-predictions',
   standalone: true,
-  imports: [CommonModule, NgApexchartsModule],
+  imports: [CommonModule, NgApexchartsModule, GenericLoanChartComponent],
   templateUrl: './predictions.tmpl.html',
   styleUrls: ['./predictions.component.css'],
 })
 export class PredictionsComponent{
+
+    loans: LoanFormData[] = [];
+  
+    async loadGraph() {
+      try {
+        const response = await fetch('http://pladvsvwebapp/TylerVest/TylerVest.aspx?op=retrieveAllLoanInfo');
+        const data = await response.json();
+        this.loans = Array.isArray(data) ? data : [data];
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    }
+    
+  
+    ngOnInit() {
+      this.loadGraph();
+    }
   // export class PredictionsComponent {
 
   newPrediction1: string = '';
   newPrediction2: string = '';
 
-  loans: string[] = ['All']; // Default option
+  //loans: string[] = ['All']; // Default option
   selectedLoan: string = 'All';
 
   chartOptions: ApexOptions = {

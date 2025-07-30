@@ -59,7 +59,6 @@ import {MessageService, BlobMessage } from '../MessageService';
 })
 export class MessageSenderComponent {
 
-  
   @Input() loanData: any;
   @Input() isLoanMessage: boolean = false;
   // Inject the MessageService

@@ -18,7 +18,7 @@ export type ChartOptions = {
 };
 
 @Component({
-  selector: 'app-generic-loan-chart',
+  selector: 'app-income-chart',
   standalone: true,
   imports: [CommonModule, NgApexchartsModule],
   template: `
@@ -33,7 +33,7 @@ export type ChartOptions = {
     <div *ngIf="!chartOptions" class="text-gray-500">No loan data to display.</div>
   `
 })
-export class GenericLoanChartComponent implements OnChanges {
+export class IncomeChartComponent implements OnChanges {
   @Input() loans: LoanFormData[] = [];
   @Input() isHomeScreen: boolean = false;
 
