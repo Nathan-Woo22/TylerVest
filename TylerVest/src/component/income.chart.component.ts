@@ -120,8 +120,8 @@ export class IncomeChartComponent implements OnInit {
   private calculateMonthlyIncomeChart(months: number = 12): ChartOptions {
     const incomes = [
       {
-        TotalCharges: 1703958837.27,
-        UnpaidBalances: 1647116906.27,
+        TotalCharges: 1703958.83727,
+        UnpaidBalances: 1647116.90627,
         UnpaidPayment: 43953.29
       }
     ];
