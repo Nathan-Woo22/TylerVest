@@ -17,6 +17,12 @@ export type ChartOptions = {
   title: ApexTitleSubtitle;
 };
 
+export interface IncomeData {
+  TotalCharges: number;
+  UnpaidBalances: number;
+  UnpaidPayment: number;
+}
+
 @Component({
   selector: 'app-income-chart',
   standalone: true,
@@ -34,16 +40,29 @@ export type ChartOptions = {
   `
 })
 export class IncomeChartComponent implements OnChanges {
-  @Input() loans: LoanFormData[] = [];
+  @Input() loans: IncomeData[] = [
+    {   
+        TotalCharges: 1703958837.27,
+        UnpaidBalances: 1647116906.27,
+        UnpaidPayment: 43953.29
+    },
+    {   
+        TotalCharges: 1703958837.27,
+        UnpaidBalances: 1647116906.27,
+        UnpaidPayment: 43953.29
+    },
+    {   
+        TotalCharges: 1703958837.27,
+        UnpaidBalances: 1647116906.27,
+        UnpaidPayment: 43953.29
+    },
+  ];
   @Input() isHomeScreen: boolean = false;
 
   chartOptions: ChartOptions | null = null;
 
   ngOnChanges(changes: SimpleChanges) {
-    if (this.loans && this.loans.length > 0 && this.isHomeScreen) {
-      this.chartOptions = this.calculateNewChart(this.loans);
-    }
-    else if (this.loans && this.loans.length > 0){
+    if (this.loans && this.loans.length > 0){
       this.chartOptions = this.calculateChart(this.loans);
     }
      else {
