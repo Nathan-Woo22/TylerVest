@@ -20,7 +20,7 @@ namespace TylerVest_Service
                             IF EXISTS (SELECT 1 FROM Items WHERE ID = @ID)
                                 UPDATE Items SET LoanAmount = @LoanAmount WHERE ID = @ID
                             ELSE
-                                INSERT INTO Items (ID, InterestRate, LenderName, LoanAmount, Term) VALUES (@ID, @InterestRate, @LenderName, @LoanAmount, @Term)";
+                                INSERT INTO Items (ID, InterestRate, LenderName, LoanAmount, Term, LoanName) VALUES (@ID, @InterestRate, @LenderName, @LoanAmount, @Term, @LoanName)";
 
         using (SqlConnection connection = new SqlConnection(connectionString))
         using (SqlCommand command = new SqlCommand(upsertQuery, connection))
@@ -84,10 +84,10 @@ namespace TylerVest_Service
       using (SqlConnection connection = new SqlConnection(connectionString))
       using (SqlCommand command = new SqlCommand(selectQuery, connection))
       {
-        command.Parameters.AddWithValue("@ID", ID);
+        //command.Parameters.AddWithValue("@ID", ID);
         connection.Open();
         object result = command.ExecuteScalar();
-        return result?.ToString();
+        //return result?.ToString();
       }
     }
   }
