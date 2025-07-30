@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ApexOptions } from 'ng-apexcharts';
 import { NgApexchartsModule } from 'ng-apexcharts';
 
@@ -10,13 +10,26 @@ import { NgApexchartsModule } from 'ng-apexcharts';
   templateUrl: './predictions.tmpl.html',
   styleUrls: ['./predictions.component.css'],
 })
-export class PredictionsComponent {
+export class PredictionsComponent implements OnInit {
 
   newPrediction1: string = '';
   newPrediction2: string = '';
 
-  categories: string[] = ['All', 'Loan1', 'Loan2', 'Loan3'];
-  selectedCategory: string = 'All';
+  loans: string[] = ['All']; // Default option
+  selectedLoan: string = 'All';
+
+  ngOnInit() {
+    fetch('/TestPage.aspx?op=retrieveAllLoanInfo')
+      .then(response => response.json())
+      .then(data => {
+        if (Array.isArray(data)) {
+          this.loans = ['All', ...data]; // Merge 'All' with fetched loans
+        } else {
+          console.error('Unexpected response format:', data);
+        }
+      })
+      .catch(error => console.error('Error fetching loan names:', error));
+  }
 
   chartOptions: ApexOptions = {
     chart: {
@@ -46,7 +59,7 @@ export class PredictionsComponent {
   }
 
   onCategoryChange(category: string) {
-    this.selectedCategory = category;
+    this.selectedLoan = category;
     console.log('Select a Loan to Evaluate:', category);
   }
 }
