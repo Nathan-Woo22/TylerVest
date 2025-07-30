@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NgApexchartsModule } from 'ng-apexcharts';
+import { ApexStroke, NgApexchartsModule } from 'ng-apexcharts';
 import { LoanFormData } from './investments.component'; // adjust path
 import {
   ApexAxisChartSeries,
@@ -12,6 +12,7 @@ import {
 export type ChartOptions = {
   series: ApexAxisChartSeries;
   chart: ApexChart;
+  stroke: ApexStroke;
   xaxis: ApexXAxis;
   title: ApexTitleSubtitle;
 };
@@ -67,15 +68,30 @@ export class GenericLoanChartComponent implements OnChanges {
           balances.push(0); // pad with 0 after loan is paid off
         }
       }
+
       return {
         name: loan.LoanName,
         data: balances
       };
     });
+      const aggregateBalances: number[] = [];
+      for (let i = 0; i < maxNumPayments; i++) {
+        const totalAtMonth = series.reduce((sum, loanSeries) => sum + loanSeries.data[i], 0);
+        aggregateBalances.push(Number(totalAtMonth.toFixed(2)));
+      }
+      // Add aggregate series
+      series.push({
+        name: 'Total Outstanding',
+        data: aggregateBalances
+      });
 
     return {
       series,
       chart: { type: 'line', height: 350 },
+      stroke: {
+        width: [2, 2, 2, 2, 4], // Make last line (aggregate) thicker
+        dashArray: [0, 0, 0, 0, 5] // Make last line dashed
+      },
       xaxis: { categories: months },
       title: { text: 'Amortization For All Loans' }
     };

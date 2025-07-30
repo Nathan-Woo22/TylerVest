@@ -1,5 +1,5 @@
 import { Component, inject, Input } from '@angular/core';
-import {Message, MessageService, BlobMessage } from '../MessageService';
+import {MessageService, BlobMessage } from '../MessageService';
 
 @Component({
   selector: 'app-message-sender',
@@ -63,7 +63,9 @@ export class MessageSenderComponent {
   @Input() loanData: any;
   @Input() isLoanMessage: boolean = false;
   // Inject the MessageService
-   constructor(private messageService: MessageService) {}
+   constructor(private messageService: MessageService) {
+        this.saveLoadInfo = this.saveLoadInfo.bind(this);
+   }
 
   // Handle button click
   saveLoadInfo(): void {
@@ -75,6 +77,7 @@ export class MessageSenderComponent {
       StartDate: this.loanData?.StartDate || '',
       LoanName: this.loanData?.LoanName || ''
     };
+    console.log(messageDetails);
 
     // Create the final message object with id and blob only
     const message: BlobMessage = {
