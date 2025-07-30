@@ -208,7 +208,7 @@ export class GenericLoanChartComponent implements OnChanges {
       chart: { type: 'line', height: 500 },
       stroke: { width: 2 },
       xaxis: { categories: monthsArray,
-        labels: { style: { colors: '#fff', fontSize: '14px' } }
+        // labels: { style: { colors: '#fff', fontSize: '14px' } }
       },
       // yaxis: {
       //   logarithmic: true,
