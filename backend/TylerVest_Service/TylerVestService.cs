@@ -20,7 +20,7 @@ namespace TylerVest_Service
                             IF EXISTS (SELECT 1 FROM Items WHERE ID = @ID)
                                 UPDATE Items SET LoanAmount = @LoanAmount WHERE ID = @ID
                             ELSE
-                                INSERT INTO Items (ID, InterestRate, LenderName, LoanAmount, Term) VALUES (@ID, @InterestRate, @LenderName, @LoanAmount, @Term)";
+                                INSERT INTO Items (ID, InterestRate, LenderName, LoanAmount, Term, LoanName) VALUES (@ID, @InterestRate, @LenderName, @LoanAmount, @Term, @LoanName)";
 
         using (SqlConnection connection = new SqlConnection(connectionString))
         using (SqlCommand command = new SqlCommand(upsertQuery, connection))
@@ -81,14 +81,23 @@ namespace TylerVest_Service
     {
       string connectionString = "Server=PLAPVSVODYDB10\\WEBAPPDEV;Database=Tyler;User Id=TSGMeridian;Password=alp;";
       string selectQuery = "SELECT LoanName FROM Items";
+      var loanNames = new List<string>();
+
       using (SqlConnection connection = new SqlConnection(connectionString))
       using (SqlCommand command = new SqlCommand(selectQuery, connection))
       {
-        command.Parameters.AddWithValue("@ID", ID);
         connection.Open();
-        object result = command.ExecuteScalar();
-        return result?.ToString();
+        using (SqlDataReader reader = command.ExecuteReader())
+        {
+            while (reader.Read())
+            {
+                loanNames.Add(reader["LoanName"].ToString());
+            }
+        }
       }
+
+      // Convert the list of loan names to JSON
+      return JsonSerializer.Serialize(loanNames);
     }
 
     public string LoadOdysseyFinancialSummary()
