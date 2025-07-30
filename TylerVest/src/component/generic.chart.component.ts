@@ -39,7 +39,7 @@ export class GenericLoanChartComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (this.loans && this.loans.length > 0) {
-      this.chartOptions = this.calculateChart(this.loans);
+      this.chartOptions = this.calculateNewChart(this.loans);
     } else {
       this.chartOptions = null;
     }
@@ -94,6 +94,78 @@ export class GenericLoanChartComponent implements OnChanges {
       },
       xaxis: { categories: months },
       title: { text: 'Amortization For All Loans' }
+    };
+  }
+
+  private calculateNewChart(loans: LoanFormData[]): ChartOptions {
+      const maxNumPayments = Math.max(...loans.map(l => l.NumPayments));
+    const months = Array.from({ length: maxNumPayments }, (_, i) => `Month ${i + 1}`);
+
+    // Calculate loan balances (negative values)
+    const series = loans.map(loan => {
+      const monthlyRate = loan.InterestRate / 12;
+      const numPayments = loan.NumPayments;
+      const monthlyPayment = loan.Principal * monthlyRate / (1 - Math.pow(1 + monthlyRate, -numPayments));
+
+      let remaining = loan.Principal;
+      const balances: number[] = [];
+      for (let i = 1; i <= maxNumPayments; i++) {
+        if (i <= numPayments) {
+          const interest = remaining * monthlyRate;
+          const principalPayment = monthlyPayment - interest;
+          remaining = Math.max(0, remaining - principalPayment);
+          
+          balances.push(-Number(remaining.toFixed(2))); // Make negative
+        } else {
+          balances.push(0);
+        }
+      }
+
+      return {
+        name: loan.LoanName + ' (Debt)',
+        data: balances
+      };
+    });
+
+    // Add income series (positive values)
+    const monthlyIncome = 5000; // You can make this configurable
+    const incomeData = Array(maxNumPayments).fill(monthlyIncome);
+    
+    series.push({
+      name: 'Monthly Income',
+      data: incomeData
+    });
+
+    // Calculate net position (income - total debt)
+    const aggregateDebt: number[] = [];
+    for (let i = 0; i < maxNumPayments; i++) {
+      const totalDebtAtMonth = series.slice(0, -1).reduce((sum, loanSeries) => sum + Math.abs(loanSeries.data[i]), 0);
+      const netPosition = monthlyIncome - totalDebtAtMonth;
+      aggregateDebt.push(Number(netPosition.toFixed(2)));
+    }
+
+    series.push({
+      name: 'Net Position',
+      data: aggregateDebt
+    });
+
+    return {
+      series,
+      chart: { type: 'line', height: 350 },
+      stroke: {
+        width: [2, 2, 2, 2, 3, 4],
+        dashArray: [0, 0, 0, 0, 0, 5]
+      },
+      //colors: ['#FF6B6B', '#FF8E8E', '#FFB3B3', '#FFC0C0', '#4CAF50', '#2196F3'],
+      xaxis: { categories: months },
+      // yaxis: {
+      //   labels: {
+      //     formatter: function(val) {
+      //       return val >= 0 ? '+$' + val.toLocaleString() : '-$' + Math.abs(val).toLocaleString();
+      //     }
+      //   }
+      // },
+      title: { text: 'Cash Flow Analysis: Debt vs Income' }
     };
   }
 }
