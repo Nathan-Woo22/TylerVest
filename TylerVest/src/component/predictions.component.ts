@@ -12,26 +12,14 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './predictions.tmpl.html',
   styleUrls: ['./predictions.component.css'],
 })
-export class PredictionsComponent implements OnInit {
+export class PredictionsComponent{
+  // export class PredictionsComponent {
 
   newPrediction1: string = '';
   newPrediction2: string = '';
 
   loans: string[] = ['All']; // Default option
   selectedLoan: string = 'All';
-
-  ngOnInit() {
-    fetch('/TestPage.aspx?op=retrieveAllLoanInfo')
-      .then(response => response.json())
-      .then(data => {
-        if (Array.isArray(data)) {
-          this.loans = ['All', ...data]; // Merge 'All' with fetched loans
-        } else {
-          console.error('Unexpected response format:', data);
-        }
-      })
-      .catch(error => console.error('Error fetching loan names:', error));
-  }
 
   chartOptions: ApexOptions = {
     chart: {
@@ -51,7 +39,15 @@ export class PredictionsComponent implements OnInit {
     } as ApexTitleSubtitle,
   };
 
-  addPredictions() {
+  async addPredictions() {
+    try {
+      const response = await fetch('http://pladvsvwebapp/TylerVest/TylerVest.aspx?op=retrieveAllLoanInfo');
+      const data = await response.json();
+      console.log(data);
+      // Update your component state here
+    } catch (error) {
+      console.error('Error:', error);
+    }
     if (this.newPrediction1.trim() || this.newPrediction2.trim()) {
       console.log('First Prediction:', this.newPrediction1);
       console.log('Second Prediction:', this.newPrediction2);

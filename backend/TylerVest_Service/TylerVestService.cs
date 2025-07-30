@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
 using System.Text.Json;
+using System.Web.Script.Serialization;
 
 namespace TylerVest_Service
 {
@@ -77,27 +78,68 @@ namespace TylerVest_Service
       }
     }
 
-    public void RetrieveLoanInformation() 
+    public void SaveLog(string ID, string data)
     {
       string connectionString = "Server=PLAPVSVODYDB10\\WEBAPPDEV;Database=Tyler;User Id=TSGMeridian;Password=alp;";
-      string selectQuery = "SELECT LoanName FROM Items";
-      var loanNames = new List<string>();
+      //string upsertQuery = @"
+      //                      IF EXISTS (SELECT 1 FROM Items WHERE ID = @ID)
+      //                          UPDATE Items SET Data = @Data WHERE ID = @ID
+      //                      ELSE
+      //                          INSERT INTO Items (ID, Data) VALUES (@ID, @Data)";
+      string upsertQuery = @"INSERT INTO Items (ID, Data) VALUES (@ID, @Data)";
+
 
       using (SqlConnection connection = new SqlConnection(connectionString))
-      using (SqlCommand command = new SqlCommand(selectQuery, connection))
+      using (SqlCommand command = new SqlCommand(upsertQuery, connection))
       {
+        command.Parameters.AddWithValue("@ID", ID);
+        command.Parameters.AddWithValue("@Data", data);
+
         connection.Open();
-        using (SqlDataReader reader = command.ExecuteReader())
+        command.ExecuteNonQuery();
+      }
+    }
+
+    public string RetrieveAllLoanInformation() 
+    {
+      //return "hiya";
+      string connectionString = "Server=PLAPVSVODYDB10\\WEBAPPDEV;Database=Tyler;User Id=TSGMeridian;Password=alp;";
+      //string selectQuery = "SELECT * FROM Items WHERE ID LIKE 'msg_1753819967038_mnxx86ty0'";
+      string selectQuery = "SELECT * FROM Items";
+      var loans = new List<Dictionary<string, object>>();
+      //SaveLog("Test", "retrivingloan");
+
+      using (SqlConnection connection = new SqlConnection(connectionString))
+      {
+        using (SqlCommand command = new SqlCommand(selectQuery, connection))
         {
-            while (reader.Read())
-            {
-                loanNames.Add(reader["LoanName"].ToString());
+          connection.Open();
+          //object result = command.ExecuteScalar();
+          //return JsonSerializer.Serialize(result);
+          //string json = "{\"result\":\"" + result + "\"}";
+          //return json;
+          using (SqlDataReader reader = command.ExecuteReader())
+          {
+              while (reader.Read())
+              {
+                  var loan = new Dictionary<string, object>();
+              loan["LoanName"] = reader["LoanName"];
+              loan["LoanAmount"] = reader["LoanAmount"];
+              loan["InterestRate"] = reader["InterestRate"];
+              loan["ID"] = reader["ID"];
+              loans.Add(loan);
             }
+          }
         }
       }
 
       // Convert the list of loan names to JSON
-      return JsonSerializer.Serialize(loanNames);
+      //return "hiya";
+      //Response.ContentType = "application/json";
+      string json = new JavaScriptSerializer().Serialize(loans);
+      //Response.Write(json);
+      return json;
+      //Response.End();
     }
   }
 }

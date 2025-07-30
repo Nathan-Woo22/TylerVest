@@ -43,7 +43,7 @@ public partial class TestPage : System.Web.UI.Page
           }
           catch (Exception ex)
           {
-              Response.Write($"{{\"error\": \"Error retrieving loan information: {ex.Message}\"}}");
+              Response.Write("Error retrieving loan information");
           }
       }
       else if (string.IsNullOrEmpty(id))
