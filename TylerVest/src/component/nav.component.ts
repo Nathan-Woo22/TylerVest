@@ -36,16 +36,6 @@ import { CommonModule } from '@angular/common';
             </a>
           </li>
 
-          <li class="nav-item">
-            <a 
-              routerLink="/importdata" 
-              routerLinkActive="active"
-              class="nav-link"
-            >
-              Import Data
-            </a>
-          </li>
-
         </ul>
       </div>
     </nav>
