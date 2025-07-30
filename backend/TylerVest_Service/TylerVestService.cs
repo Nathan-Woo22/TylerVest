@@ -81,14 +81,23 @@ namespace TylerVest_Service
     {
       string connectionString = "Server=PLAPVSVODYDB10\\WEBAPPDEV;Database=Tyler;User Id=TSGMeridian;Password=alp;";
       string selectQuery = "SELECT LoanName FROM Items";
+      var loanNames = new List<string>();
+
       using (SqlConnection connection = new SqlConnection(connectionString))
       using (SqlCommand command = new SqlCommand(selectQuery, connection))
       {
-        //command.Parameters.AddWithValue("@ID", ID);
         connection.Open();
-        object result = command.ExecuteScalar();
-        //return result?.ToString();
+        using (SqlDataReader reader = command.ExecuteReader())
+        {
+            while (reader.Read())
+            {
+                loanNames.Add(reader["LoanName"].ToString());
+            }
+        }
       }
+
+      // Convert the list of loan names to JSON
+      return JsonSerializer.Serialize(loanNames);
     }
   }
 }

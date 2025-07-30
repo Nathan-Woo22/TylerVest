@@ -30,8 +30,23 @@ public partial class TestPage : System.Web.UI.Page
     else
     {
       string id = Request.QueryString["id"];
+          string op = Request.QueryString["op"];
 
-      if (string.IsNullOrEmpty(id))
+      if (op == "retrieveAllLoanInfo")
+      {
+          // Call RetrieveAllLoanInformation and send the result back
+          try
+          {
+              var service = new TylerVestService();
+              string loanInfoJson = service.RetrieveAllLoanInformation();
+              Response.Write(loanInfoJson);
+          }
+          catch (Exception ex)
+          {
+              Response.Write($"{{\"error\": \"Error retrieving loan information: {ex.Message}\"}}");
+          }
+      }
+      else if (string.IsNullOrEmpty(id))
         Response.Write("Error! ID parameter must be sent as a parameter.");
       else
       {
