@@ -1,0 +1,19 @@
+<form #messageForm="ngForm" (ngSubmit)="save()">
+    <label>
+      Content: 
+      <input type="text" name="content" [(ngModel)]="formData.content" required />
+    </label>
+    <br />
+    <label>
+      Recipient:
+      <input type="text" name="recipient" [(ngModel)]="formData.recipient" required />
+    </label>
+    <br />
+    <label>
+      Subject:
+      <input type="text" name="subject" [(ngModel)]="formData.subject" />
+    </label>
+    <br />
+    <!-- Add more fields as needed -->
+    <button type="submit" [disabled]="!messageForm.form.valid">Save</button>
+  </form>

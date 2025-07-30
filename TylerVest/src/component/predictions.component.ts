@@ -2,6 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { ApexOptions } from 'ng-apexcharts';
 import { NgApexchartsModule } from 'ng-apexcharts';
+import { FormsModule } from '@angular/forms';
+
 
 @Component({
   selector: 'app-predictions',

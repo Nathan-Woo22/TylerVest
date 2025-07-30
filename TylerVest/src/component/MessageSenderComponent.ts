@@ -5,10 +5,10 @@ import {Message, MessageService, BlobMessage } from '../MessageService';
   selector: 'app-message-sender',
   standalone: true,
   template: `
-    <div class="message-sender-container">      
+    <div class="message-sender-container">
       <button 
         type="button" 
-        (click)="sendMessage()"
+        (click)="saveLoadInfo()"
         class="styled-button">
         Submit Investment/Loan
       </button>
@@ -66,13 +66,14 @@ export class MessageSenderComponent {
    constructor(private messageService: MessageService) {}
 
   // Handle button click
-  sendMessage(): void {
+  saveLoadInfo(): void {
 
     const messageDetails = {
       LoanAmount: this.loanData?.loanAmount || 0,
       InterestRate: this.loanData?.interestRate || 0,
       Term: this.loanData?.term || 0,
-      LenderName: this.loanData?.lenderName || ''
+      LenderName: this.loanData?.lenderName || '',
+      LoanName: this.loanData?.loanName || ''
     };
 
     // Create the final message object with id and blob only

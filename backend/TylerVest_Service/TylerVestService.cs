@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
+using System.Text.Json;
 
 namespace TylerVest_Service
 {
@@ -13,22 +14,36 @@ namespace TylerVest_Service
   {
     public void Save(string ID, string data)
     {
-      string connectionString = "Server=PLAPVSVODYDB10\\WEBAPPDEV;Database=Tyler;User Id=TSGMeridian;Password=alp;";
-      string upsertQuery = @"
+      //if (ID.Contains("Add_Loan")) {
+        string connectionString = "Server=PLAPVSVODYDB10\\WEBAPPDEV;Database=Tyler;User Id=TSGMeridian;Password=alp;";
+        string upsertQuery = @"
                             IF EXISTS (SELECT 1 FROM Items WHERE ID = @ID)
-                                UPDATE Items SET Data = @Data WHERE ID = @ID
+                                UPDATE Items SET LoanAmount = @LoanAmount WHERE ID = @ID
                             ELSE
-                                INSERT INTO Items (ID, Data) VALUES (@ID, @Data)";
+                                INSERT INTO Items (ID, InterestRate, LenderName, LoanAmount, Term) VALUES (@ID, @InterestRate, @LenderName, @LoanAmount, @Term)";
 
-      using (SqlConnection connection = new SqlConnection(connectionString))
-      using (SqlCommand command = new SqlCommand(upsertQuery, connection))
-      {
-        command.Parameters.AddWithValue("@ID", ID);
-        command.Parameters.AddWithValue("@Data", data);
+        using (SqlConnection connection = new SqlConnection(connectionString))
+        using (SqlCommand command = new SqlCommand(upsertQuery, connection))
+        {
+          command.Parameters.AddWithValue("@ID", ID);
+          data = data.Replace("{", "");
+          data = data.Replace("}", "");
+          string[] items = data.Split(',')
+                  .Select(s => s.Trim())
+                  .ToArray();
+          foreach (var item in items)
+          {
+          // Split each item by the first colon to separate the key and valuei
+            var result = item.Replace("\"", "");
+            var colonIndex = result.IndexOf(':');
+            command.Parameters.AddWithValue("@" + result.Substring(0, colonIndex), result.Substring(colonIndex + 1));
+          }
+  
 
-        connection.Open();
-        command.ExecuteNonQuery();
-      }
+          connection.Open();
+          command.ExecuteNonQuery();
+        }
+      //}
     }
 
     public string Load(string ID)
@@ -59,6 +74,20 @@ namespace TylerVest_Service
 
         connection.Open();
         command.ExecuteNonQuery();
+      }
+    }
+
+    public void RetrieveLoanInformation() 
+    {
+      string connectionString = "Server=PLAPVSVODYDB10\\WEBAPPDEV;Database=Tyler;User Id=TSGMeridian;Password=alp;";
+      string selectQuery = "SELECT LoanName FROM Items";
+      using (SqlConnection connection = new SqlConnection(connectionString))
+      using (SqlCommand command = new SqlCommand(selectQuery, connection))
+      {
+        command.Parameters.AddWithValue("@ID", ID);
+        connection.Open();
+        object result = command.ExecuteScalar();
+        return result?.ToString();
       }
     }
   }
