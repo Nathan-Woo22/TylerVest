@@ -17,15 +17,15 @@ import { CommonModule } from '@angular/common';
           <h2>What We Offer</h2>
           <div class="feature-grid">
             <div class="feature-card">
-              <h3>Stuff</h3>
+              <h3>Financial Freedom</h3>
               <p>We provide top-notch services tailored to your needs.</p>
             </div>
             <div class="feature-card">
-              <h3>Stuff</h3>
+              <h3>Financial Independence</h3>
               <p>Our experienced professionals are here to help you succeed.</p>
             </div>
             <div class="feature-card">
-              <h3>Stuff</h3>
+              <h3>Information</h3>
               <p>Round-the-clock assistance whenever you need it.</p>
             </div>
           </div>
@@ -40,7 +40,7 @@ import { CommonModule } from '@angular/common';
       </main>
 
       <footer class="footer">
-        <p>&copy; 2024 Your Company. All rights reserved.</p>
+        <p>Money Money Money</p>
       </footer>
     </div>
   `,

@@ -5,14 +5,12 @@ import {Message, MessageService, BlobMessage } from '../MessageService';
   selector: 'app-message-sender',
   standalone: true,
   template: `
-    <div class="message-sender-container">
-      <h2>Send Message</h2>
-      
+    <div class="message-sender-container">      
       <button 
         type="button" 
         (click)="sendMessage()"
-        class="send-button">
-        Send Message
+        class="styled-button">
+        Submit Investment/Loan
       </button>
     </div>
   `,
@@ -21,10 +19,21 @@ import {Message, MessageService, BlobMessage } from '../MessageService';
       max-width: 500px;
       margin: 20px auto;
       padding: 20px;
-      border: 1px solid #ddd;
-      border-radius: 8px;
       font-family: Arial, sans-serif;
       text-align: center;
+    }
+
+    .styled-button {
+      padding: 12px 20px;
+      background-color: #42a5f5;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
     }
 
     h2 {
