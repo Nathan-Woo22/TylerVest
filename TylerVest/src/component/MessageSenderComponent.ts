@@ -8,7 +8,7 @@ import {Message, MessageService, BlobMessage } from '../MessageService';
     <div class="message-sender-container">
       <button 
         type="button" 
-        (click)="sendMessage()"
+        (click)="saveLoadInfo()"
         class="send-button">
         Submit
       </button>
@@ -55,7 +55,7 @@ export class MessageSenderComponent {
    constructor(private messageService: MessageService) {}
 
   // Handle button click
-  sendMessage(): void {
+  saveLoadInfo(): void {
 
     const messageDetails = {
       LoanAmount: this.loanData?.loanAmount || 0,
